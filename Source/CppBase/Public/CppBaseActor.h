@@ -8,28 +8,6 @@
 
 class UStaticMeshComponent;
 
-UENUM(BlueprintType)
-enum class EMovementState : uint8
-{
-	Mobility,
-	Static
-};
-
-USTRUCT(BlueprintType)
-struct FTransformStruct
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector CurrentLocation = FVector::ZeroVector;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FRotator CurrentRotation = FRotator::ZeroRotator;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector CurrentScale = FVector(1.0f, 1.0f, 1.0f);
-};
-
 UCLASS()
 class CPPBASE_API ACppBaseActor : public AActor
 {
@@ -43,20 +21,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere)
-	FString PlayerName = "Netologiya";
-
-	UPROPERTY(EditAnywhere)
-	int EnemyNum = 20;
-
-	UPROPERTY(EditDefaultsOnly)
-	float CurrentHealth = 57.54687;
-
-	UPROPERTY(EditInstanceOnly)
-	bool IsActive = true;
+	UFUNCTION(BlueprintCallable)
+	void SinMovement();
 
 	UFUNCTION(BlueprintCallable)
-	void ShowActorInformation();
+	FVector GetInitialLocation();
+
+	UFUNCTION(BlueprintCallable)
+	void SetInitialLocation(FVector location);
+
+	UPROPERTY(EditInstanceOnly)
+	float Amplitude = 1.0;
+
+	UPROPERTY(EditInstanceOnly)
+	float Frequency = 2.0;
+
+	UPROPERTY(VisibleAnywhere)
+	FVector InitialLocation;
 
 public:
 	// Called every frame
