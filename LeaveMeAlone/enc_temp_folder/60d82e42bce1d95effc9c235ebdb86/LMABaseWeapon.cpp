@@ -5,14 +5,17 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeapon, All, All);
 
+// Sets default values
 ALMABaseWeapon::ALMABaseWeapon()
 {
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	SetRootComponent(WeaponMesh);
 }
 
+// Called when the game starts or when spawned
 void ALMABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
@@ -70,3 +73,10 @@ bool ALMABaseWeapon::IsCurrentClipFull() const
 {
 	return CurrentAmmoWeapon.Bullets == DefaultAmmoWeapon.Bullets;
 }
+
+// Called every frame
+// void ALMABaseWeapon::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}

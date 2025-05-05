@@ -41,6 +41,8 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	CurrentStamina = MaxStamina;
 
+
+	// Weapon
 	WeaponComponent = CreateDefaultSubobject<ULMAWeaponComponent>("Weapon");
 }
 
@@ -52,6 +54,10 @@ void ALMADefaultCharacter::BeginPlay()
 	{
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
+
+	//OnHealthChanged(HealthComponent->GetHealth());
+	//HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
+	//HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
 
 	HealthComponent->OnDeath.AddDynamic(this, &ALMADefaultCharacter::OnDeath);
 

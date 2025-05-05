@@ -13,7 +13,7 @@ class LEAVEMEALONE_API ULMAWeaponComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-
+	// Sets default values for this component's properties
 	ULMAWeaponComponent();
 
 	void Fire();
@@ -24,7 +24,7 @@ public:
 	bool GetCurrentWeaponAmmo(FAmmoWeapon& AmmoWeapon) const;
 
 protected:
-
+	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -51,4 +51,7 @@ private:
 
 	FTimerHandle FireTimerHandle;
 
+	// public:
+	//  Called every frame
+	// virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 };
