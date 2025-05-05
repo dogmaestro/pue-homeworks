@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class ULMAHealthComponent;
 class UAnimMontage;
+class ULMAWeaponComponent;
 
 UCLASS()
 class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
@@ -19,8 +20,8 @@ class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
 public:
 	ALMADefaultCharacter();
 
-	UFUNCTION()
-	ULMAHealthComponent* GetHealthComponent() const;
+	//UFUNCTION()
+	//ULMAHealthComponent* GetHealthComponent() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -39,7 +40,10 @@ protected:
 	UMaterialInterface* CursorMaterial = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
-	FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);	
+	FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);		
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathMontage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float MinArmLength = 400.0f;
@@ -74,16 +78,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	bool bIsSprinting = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-	UAnimMontage* DeathMontage;
-
-
 	virtual void BeginPlay() override;
+
+
+	// Weapon
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	ULMAWeaponComponent* WeaponComponent;
 
 public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
+	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }
 
 private:
 	float YRotation = -75.0f;

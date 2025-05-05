@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/Engine.h"
+#include "Components/LMAWeaponComponent.h"
 
 ALMADefaultCharacter::ALMADefaultCharacter()
 {
@@ -28,22 +29,21 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->SetFieldOfView(FOV);
 	CameraComponent->bUsePawnControlRotation = false;
+	
+	HealthComponent = CreateDefaultSubobject<ULMAHealthComponent>("HealthComponent");
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	HealthComponent = CreateDefaultSubobject<ULMAHealthComponent>("HealthComponent");
-
 	TargetArmLength = ArmLength;
 
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	CurrentStamina = MaxStamina;
-}
 
-ULMAHealthComponent* ALMADefaultCharacter::GetHealthComponent() const
-{
-	return HealthComponent;
+
+	// Weapon
+	WeaponComponent = CreateDefaultSubobject<ULMAWeaponComponent>("Weapon");
 }
 
 void ALMADefaultCharacter::BeginPlay()
@@ -55,8 +55,13 @@ void ALMADefaultCharacter::BeginPlay()
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
 
+	//OnHealthChanged(HealthComponent->GetHealth());
+	//HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
+	//HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
+
+	HealthComponent->OnDeath.AddDynamic(this, &ALMADefaultCharacter::OnDeath);
+
 	OnHealthChanged(HealthComponent->GetHealth());
-	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
 }
 
