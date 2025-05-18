@@ -6,6 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "LMABaseWeapon.generated.h"
 
+class USkeletalMeshComponent;
+class ULMAWeaponComponent;
+class USoundWave;
+class UNiagaraSystem;
+
+
 DECLARE_MULTICAST_DELEGATE(FOnEmptyClipSignature);
 
 USTRUCT(BlueprintType)
@@ -44,6 +50,8 @@ public:
 	float FireRate = 0.1f;
 
 	FAmmoWeapon GetCurrentAmmoWeapon() const { return CurrentAmmoWeapon; }
+	bool shooting = false;
+
 
 protected:
 
@@ -63,11 +71,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	FAmmoWeapon DefaultAmmoWeapon{30, 0, true};
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	USoundWave* ShootWave;
+
 	void DecrementBullets();
 	bool IsCurrentClipEmpty() const;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	UNiagaraSystem* TraceEffect;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	FString TraceName = "Tracer";
 
 private:
 	FAmmoWeapon CurrentAmmoWeapon;
 	FTimerHandle FireTimerHandle;
+	void SpawnTrace(const FVector& TraceStart, const FVector& TraceEnd);
 
 };
